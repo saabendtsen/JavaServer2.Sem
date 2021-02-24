@@ -40,21 +40,16 @@ public class Server {
                 in.close();
                 out.close();
                 System.exit(0);
-
             } else {
                 //du er inde
+                int token = checklogin(tmpLoginData.split(":")[0],tmpLoginData.split(":")[1]);
                 out.writeUTF("w:Velkommen til ");
-                out.writeUTF("t:");
+                out.writeUTF("t:" + token);
 
             }
 
 
 
-
-
-
-
-            ///Check Login
 
             String line = "";
             while (!line.equals("Over")) {

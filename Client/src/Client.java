@@ -15,29 +15,18 @@ public class Client {
             System.out.println("Connected");
             input = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-
         } catch (UnknownHostException u) {
             System.out.println(u);
         } catch (IOException i) {
             System.out.println(i);
         }
         Scanner sc = new Scanner(System.in);
-
         System.out.println("Indtast user");
         String user = sc.nextLine();
         System.out.println("Indtast password");
         String password = sc.nextLine();
-
         out.writeUTF(user+":"+password);
 
-
-
-        //modtag svar fra server
-
-        //w:welcome, t:Token, e:error
-
-
-        //whileloop der venter 10 sec max på svar
 
         String loginRespose = input.readUTF();
         String loginToken;
@@ -46,22 +35,15 @@ public class Client {
 
         //Test welcome
         if (loginRespose.contains("w:")){
-            //
             loginToken = input.readUTF();
+            System.out.println(":" + loginToken);
         }
         if (loginRespose.contains("e:")){
             System.out.println("du sutter");
         }
 
 
-        input.close();
-        out.close();
-        socket.close();
-        System.exit(0);
-
-
         String line = "";
-
         while (!line.equals("Over")) {
             try {
                 line = sc.nextLine();
@@ -70,12 +52,12 @@ public class Client {
                 System.out.println(input.readUTF());
 
 
-
             } catch (IOException i) {
                 System.out.println(i);
             }
-
         }
+
+
         try {
             input.close();
             out.close();
