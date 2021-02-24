@@ -9,6 +9,7 @@ public class Server {
     private DataOutputStream out = null;
 
     private ArrayList<User> users = new ArrayList<User>();
+    private Menu menu = new Menu();
 
     public Server(int port) {
 
@@ -43,16 +44,16 @@ public class Server {
             } else {
                 //du er inde
                 int token = checklogin(tmpLoginData.split(":")[0],tmpLoginData.split(":")[1]);
-                out.writeUTF("w:Velkommen til ");
+                out.writeUTF("w:Velkommen til "+ tmpLoginData.split(":")[0]);
                 out.writeUTF("t:" + token);
-
+                out.writeUTF(menu.mainMenu());
             }
 
 
 
 
             String line = "";
-            while (!line.equals("Over")) {
+            while (!line.equalsIgnoreCase(("Over"))) {
                 try {
                     line = in.readUTF();
                     System.out.println("Client siger: " +line);

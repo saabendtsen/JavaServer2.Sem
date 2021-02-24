@@ -6,6 +6,8 @@ public class Client {
     private Socket socket = null;
     private DataInputStream input = null;
     private DataOutputStream out = null;
+    private String serverRespose;
+    private Scanner sc = new Scanner(System.in);
 
 
     // constructor to put ip address and port
@@ -20,54 +22,76 @@ public class Client {
         } catch (IOException i) {
             System.out.println(i);
         }
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Indtast user");
-        String user = sc.nextLine();
-        System.out.println("Indtast password");
-        String password = sc.nextLine();
-        out.writeUTF(user+":"+password);
 
 
-        String loginRespose = input.readUTF();
-        String loginToken;
+        //Login to server
+        if (!loggedIn()) {
+            input.close();
+            out.close();
+            socket.close();
+        } else {
+            String line = "";
+            while (!line.equals("Over")) {
+                try {
+                    serverRespose = input.readUTF();
 
-        System.out.println(loginRespose);
+                    if (serverRespose.contains("m:")){
+                        for (int i = 1; i < serverRespose.split(";").length; i++) {
+                            System.out.println(serverRespose.split(";")[i]);
+                        }
+                    }
 
-        //Test welcome
-        if (loginRespose.contains("w:")){
-            loginToken = input.readUTF();
-            System.out.println(":" + loginToken);
-        }
-        if (loginRespose.contains("e:")){
-            System.out.println("du sutter");
-        }
+                    line = sc.nextLine();
+                    out.writeUTF(line);
+                    out.flush();
+                    System.out.println(input.readUTF());
+
+                } catch (IOException i) {
+                    System.out.println(i);
+                }
+            }
 
 
-        String line = "";
-        while (!line.equals("Over")) {
             try {
-                line = sc.nextLine();
-                out.writeUTF(line);
-                out.flush();
-                System.out.println(input.readUTF());
-
-
+                input.close();
+                out.close();
+                socket.close();
             } catch (IOException i) {
                 System.out.println(i);
             }
         }
+    }
+
+    public boolean loggedIn() throws IOException {
 
 
-        try {
-            input.close();
-            out.close();
-            socket.close();
-        } catch (IOException i) {
-            System.out.println(i);
+        System.out.println("Indtast user");
+        String user = sc.nextLine();
+        System.out.println("Indtast password");
+        String password = sc.nextLine();
+        out.writeUTF(user + ":" + password);
+        serverRespose = input.readUTF();
+
+        if (serverRespose.contains("w:")) {
+            System.out.println(serverRespose.split(":")[1]);
+            String loginToken = input.readUTF();
+            System.out.println("Token: " + loginToken);
+            return true;
         }
+
+        if (serverRespose.contains("e:")) {
+            System.out.println("du sutter");
+            System.out.println(serverRespose.split(":")[1]);
+        }
+        return false;
     }
 
     public static void main(String args[]) throws IOException {
         Client client = new Client("127.0.0.1", 5000);
     }
 }
+
+
+
+
+
