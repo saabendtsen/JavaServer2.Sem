@@ -32,19 +32,26 @@ public class Server {
             //String tmpLoginData = "bob:123";
             String tmpLoginData = in.readUTF();
 
-            checklogin(tmpLoginData.)
-            tmpLoginData.split(":")[0]) && u.getPasswork().equals(tmpLoginData.split(":")[1])
+            if(checklogin(tmpLoginData.split(":")[0],tmpLoginData.split(":")[1]) == 0){
+                //du har tastet forkert
+                //Du forkert
+                out.writeUTF("e:Forkert user eller password!");
+                socket.close();
+                in.close();
+                out.close();
+                System.exit(0);
+
+            } else {
+                //du er inde
+                out.writeUTF("w:Velkommen til ");
+                out.writeUTF("t:");
+
+            }
 
 
 
 
 
-            //Du forkert
-            out.writeUTF("e:Forkert user eller password!");
-            socket.close();
-            in.close();
-            out.close();
-            System.exit(0);
 
 
             ///Check Login
@@ -86,19 +93,13 @@ public class Server {
     }
 
     public int checklogin(String username, String password){
-
         for (User u : users){
-            if(u.getUsername().equals(tmpLoginData.split(":")[0]) && u.getPasswork().equals(tmpLoginData.split(":")[1])){
-                //Du er inde
-                out.writeUTF("w:Velkommen til " + u.getUsername());
-                out.writeUTF("t:" + String.valueOf(u.getUserId()));
-                break;
+            if(u.getUsername().equals(username) && u.getPasswork().equals(password)){
+                return u.getUserId();
             } else {
                 continue;
             }
-
         }
-
         return 0;
     }
 
