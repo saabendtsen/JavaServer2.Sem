@@ -1,3 +1,5 @@
+import Protoco.Protocols;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ public class Server {
 
     private ArrayList<User> users = new ArrayList<User>();
     private Menu menu = new Menu();
+    private Protocols ph = new Protocols();
 
     public Server(int port) {
 
@@ -47,32 +50,25 @@ public class Server {
                 out.writeUTF("w:Velkommen til "+ tmpLoginData.split(":")[0]);
                 out.writeUTF("t:" + token);
                 out.writeUTF(menu.mainMenu());
+
             }
 
 
 
 
-            String line = "";
-            while (!line.equalsIgnoreCase(("Over"))) {
+
+            String ClientLine = "";
+            String response= "";
+            while (!ClientLine.equalsIgnoreCase(("Over"))) {
                 try {
-                    line = in.readUTF();
-                    System.out.println("Client siger: " +line);
+                    //ClientLine = in.readUTF();
+                    ClientLine = in.readUTF();
+                    //System.out.println("Client siger: " +ClientLine);
+                    response = ph.checkP(ClientLine);
+                    out.writeUTF(response);
 
-                    if(line.equals("are you here")){
-                        System.out.println("Jeg er inde her hej");
-                        out.writeUTF("im listning");
-                        out.flush();
-                    }
-                    while (line.equals("hej")){
-                        counter++;
-                        System.out.println("hej" + counter);
-                        out.writeUTF("hej" + counter);
-                        out.writeInt(counter);
-                        out.flush();
-
-                    }
-                    out.writeUTF(line);
-                    out.flush();
+                   // out.writeUTF(ClientLine);
+                    // out.flush();
 
 
                 } catch (IOException i) {

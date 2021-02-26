@@ -1,3 +1,5 @@
+import Protocols.ProtocolH;
+
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
@@ -8,6 +10,7 @@ public class Client {
     private DataOutputStream out = null;
     private String serverRespose;
     private Scanner sc = new Scanner(System.in);
+    private ProtocolH ph = new ProtocolH();
 
 
     // constructor to put ip address and port
@@ -34,17 +37,15 @@ public class Client {
             while (!line.equals("Over")) {
                 try {
                     serverRespose = input.readUTF();
-
-                    if (serverRespose.contains("m:")){
-                        for (int i = 1; i < serverRespose.split(";").length; i++) {
-                            System.out.println(serverRespose.split(";")[i]);
-                        }
-                    }
-
-                    line = sc.nextLine();
+                    //System.out.println("Server svarer: " + serverRespose);
+                    line = ph.checkP(serverRespose);
+                    System.out.println(line);
                     out.writeUTF(line);
-                    out.flush();
-                    System.out.println(input.readUTF());
+
+                    //line = sc.nextLine();
+                    //out.writeUTF(line);
+                   // out.flush();
+                    //System.out.println(input.readUTF());
 
                 } catch (IOException i) {
                     System.out.println(i);

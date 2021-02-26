@@ -7,7 +7,7 @@ public class Menu {
         st.append("m:");
 
         st.append("Main Menu;");
-        st.append("1. Hear a joke;");
+        st.append("j. Hear a joke;");
         return st.toString();
     }
 }
